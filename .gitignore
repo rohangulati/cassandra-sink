@@ -1,0 +1,20 @@
+*.class
+
+# Package Files #
+*.war
+*.ear
+*.settings
+*.DS_Store
+.classpath
+.project
+bin
+logs
+.idea
+target/
+build/
+deploy/
+/binclasses
+.metadata/
+*.iml
+*/.gitignore
+*/test-output/
