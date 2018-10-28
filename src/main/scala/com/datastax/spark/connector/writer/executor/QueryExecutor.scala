@@ -25,7 +25,7 @@ object QueryExecutor {
             failureHandler: Option[Handler[RichStatement]]): QueryExecutor = {
 
     val poolingOptions = session.getCluster.getConfiguration.getPoolingOptions
-    val maxConcurrentQueries = (parallelismLevel)
+    val maxConcurrentQueries = parallelismLevel
     new QueryExecutor(session,
                       maxConcurrentQueries,
                       successHandler,
