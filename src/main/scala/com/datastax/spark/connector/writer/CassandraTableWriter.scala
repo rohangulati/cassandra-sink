@@ -9,7 +9,6 @@ import com.datastax.spark.connector.cql._
 import com.datastax.spark.connector.types.{ListType, MapType}
 import com.datastax.spark.connector.util.Quote._
 import com.datastax.spark.connector.util.{CountingIterator, Logging}
-import org.apache.spark.TaskContext
 
 import scala.collection._
 
@@ -233,8 +232,7 @@ class CassandraTableWriter[T] private (connector: CassandraConnector,
     * @param taskContext
     * @param data    primary key values to select delete rows
     */
-  def delete(columns: ColumnSelector)(taskContext: TaskContext,
-                                      data: Iterator[T]): Unit =
+  def delete(columns: ColumnSelector)(data: Iterator[T]): Unit =
     writeInternal(deleteQueryTemplate(columns), data)
 
   private def writeInternal(queryTemplate: String, data: Iterator[T]): Unit = {
@@ -245,7 +243,10 @@ class CassandraTableWriter[T] private (connector: CassandraConnector,
       val stmt = prepareStatement(queryTemplate, session).setConsistencyLevel(
         writeConf.consistencyLevel)
       val queryExecutor =
-        new QueryExecutor(session, writeConf.parallelismLevel, None, None)
+        new executor.QueryExecutor(session,
+                                   writeConf.parallelismLevel,
+                                   None,
+                                   None)
       val routingKeyGenerator = new RoutingKeyGenerator(tableDef, columnNames)
       val batchType = if (isCounterUpdate) Type.COUNTER else Type.UNLOGGED
 

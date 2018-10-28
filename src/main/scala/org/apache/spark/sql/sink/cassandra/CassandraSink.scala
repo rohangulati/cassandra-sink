@@ -21,7 +21,8 @@ private class CassandraSink[T: RowWriterFactory](connector: CassandraConnector,
                                                    false,
                                                  e: Encoder[T])
     extends Sink
-    with Logging {
+    with Logging
+    with Serializable {
 
   @volatile private var latestBatchId = -1L
 
